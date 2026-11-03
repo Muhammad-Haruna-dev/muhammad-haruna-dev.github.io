@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Muhammad Haruna — Firmware Engineer</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --surface: #171e26;
+      --border: #263240;
+      --text: #d7dee6;
+      --muted: #8a97a6;
+      --accent: #3ddc97;
+      --mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 64px 20px; }
+
+    /* Intro */
+    h1 { font-size: clamp(2rem, 6vw, 2.75rem); margin: 0; line-height: 1.15; }
+    .role { color: var(--muted); font-size: 1.15rem; margin: 6px 0 20px; }
+    .intro p { max-width: 60ch; }
+    .links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 20px; font-family: var(--mono); font-size: 14px; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin: 56px 0 24px; border-bottom: 1px solid var(--border); }
+    .tab {
+      background: none; border: 0; border-bottom: 2px solid transparent;
+      color: var(--muted); font: inherit; font-weight: 600;
+      padding: 10px 16px; margin-bottom: -1px; cursor: pointer;
+    }
+    .tab:hover { color: var(--text); }
+    .tab[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+    /* Panels */
+    .item { padding: 20px 0; border-bottom: 1px solid var(--border); }
+    .item:last-child { border-bottom: 0; }
+    .item-head { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 20px; }
+    .item-head .meta { text-align: right; white-space: nowrap; }
+    @media (max-width: 560px) {
+      .item-head { grid-template-columns: 1fr; }
+      .item-head .meta { text-align: left; white-space: normal; }
+    }
+    .item h3 { margin: 0; font-size: 1.05rem; }
+    .meta { color: var(--muted); font-family: var(--mono); font-size: 13px; }
+    .item ul { margin: 8px 0 0; padding-left: 20px; }
+    .item p { margin: 8px 0 0; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .tag {
+      font-family: var(--mono); font-size: 12px; color: var(--accent);
+      border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px;
+    }
+    /* Certificate cards: click opens the full image */
+    .certs { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .cert {
+      display: flex; flex-direction: column; background: var(--surface); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+    .cert:hover { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
+    .cert:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .cert img { aspect-ratio: 4 / 3; width: 100%; object-fit: cover; object-position: top; background: #fff; border-bottom: 1px solid var(--border); }
+    .cert-body { padding: 12px 14px 14px; }
+    .cert h3 { margin: 2px 0 4px; font-size: 1rem; }
+    .cert p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    /* Beyond Work */
+    .beyond-part + .beyond-part { margin-top: 48px; }
+    .beyond-head {
+      margin: 0 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+      font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    }
+    .beyond-part p { max-width: 65ch; margin: 0 0 16px; }
+    .feature { margin: 0 0 16px; }
+    .feature img { display: block; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+    .feature figcaption { margin-top: 8px; color: var(--muted); font-size: 13px; }
+    .button {
+      display: inline-block; padding: 8px 16px; border: 1px solid var(--accent); border-radius: 6px;
+      font-family: var(--mono); font-size: 14px; transition: background 0.15s, color 0.15s;
+    }
+    .button:hover { background: var(--accent); color: var(--bg); text-decoration: none; }
+
+    /* Module cards */
+    .modules { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin-top: 14px; }
+    .module { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .module { padding: 14px; }
+    .module h4 { margin: 0; font-size: 0.95rem; line-height: 1.35; }
+    .badge {
+      display: inline-block; margin-top: 8px; padding: 1px 8px; border-radius: 999px;
+      background: rgba(245, 185, 66, 0.12); color: #f5b942; font-family: var(--mono); font-size: 12px;
+    }
+
+    /* Collapsed list of remaining modules */
+    .more { margin-top: 14px; border: 1px solid var(--border); border-radius: 8px; }
+    .more summary { padding: 10px 14px; cursor: pointer; font-weight: 600; color: var(--muted); }
+    .more summary:hover, .more[open] summary { color: var(--text); }
+    .more ul { margin: 0; padding: 4px 14px 14px 34px; columns: 2; column-gap: 32px; color: var(--muted); font-size: 14px; }
+    .more li { break-inside: avoid; }
+    @media (max-width: 560px) { .more ul { columns: 1; } }
+    /* Logic analyser trace */
+    .analyzer {
+      background: #0a0e12; border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 14px 8px; margin-bottom: 8px; font-family: var(--mono); font-size: 11px;
+    }
+    .analyzer-head {
+      display: flex; justify-content: space-between; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
+    .channel { display: grid; grid-template-columns: 104px 1fr; align-items: center; }
+    .channel-label { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .channel-label b { color: var(--ch); font-weight: 600; margin-right: 6px; }
+    .trace {
+      height: 40px; border-top: 1px solid #161d25;
+      background-image: linear-gradient(to right, #1c2631 1px, transparent 1px);
+      background-size: calc(100% / var(--cols)) 100%;
+    }
+    .trace svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .trace path { stroke: var(--ch); stroke-width: 1.5; fill: none; vector-effect: non-scaling-stroke; }
+    .trace path.fill { stroke: none; fill: var(--ch); opacity: 0.12; }
+    .channel.active .channel-label { color: var(--text); }
+    .channel.active path { stroke-width: 2.5; }
+    .channel.active path.fill { opacity: 0.25; }
+    .ticks { position: relative; height: 18px; color: var(--muted); }
+    .ticks span { position: absolute; top: 0; transform: translateX(-50%); }
+    .ticks span:first-child { transform: none; }
+    .ticks span:last-child { transform: translateX(-100%); }
+    .channel:not(.ruler) { cursor: pointer; }
+
+    /* Project cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; margin-top: 20px; }
+    .card {
+      display: flex; flex-direction: column; gap: 8px; padding: 18px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); cursor: pointer; transition: border-color 0.15s, transform 0.15s;
+    }
+    .card:hover, .card.active { text-decoration: none; border-color: var(--accent); transform: translateY(-2px); }
+    .card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .card h3 { margin: 0; font-size: 1.1rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 15px; }
+    .card .tags { margin-top: 2px; }
+    .card .view { margin-top: auto; padding-top: 8px; color: var(--accent); font-family: var(--mono); font-size: 13px; }
+
+    .skill-group { margin-bottom: 28px; }
+    .skill-group h3 { margin: 0 0 4px; font-size: 1rem; color: var(--muted); font-weight: 600; }
+
+    footer { margin-top: 64px; color: var(--muted); font-size: 13px; font-family: var(--mono); }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="intro">
+      <h1>Muhammad Haruna</h1>
+      <p class="role">Firmware Engineer</p>
+      <p>
+        Firmware Engineer with commercial experience developing and maintaining safety-critical
+        solutions across the full product lifecycle at FireAngel. Proficient in C and C++, RTOS,
+        bare-metal, and hardware development for ARM Cortex-M architectures. Open to Embedded
+        Software opportunities across the UK.
+      </p>
+      <div class="links">
+        <a href="mailto:mharunambrk@gmail.com">mharunambrk@gmail.com</a>
+        <a href="https://www.linkedin.com/in/muhammad-haruna-9b86991b2">LinkedIn</a>
+      </div>
+    </section>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-experience" aria-controls="experience" aria-selected="true">Experience</button>
+      <button class="tab" role="tab" id="tab-education" aria-controls="education" aria-selected="false" tabindex="-1">Education</button>
+      <button class="tab" role="tab" id="tab-certificates" aria-controls="certificates" aria-selected="false" tabindex="-1">Certificates</button>
+      <!-- Personal Projects tab hidden for now: remove "hidden" to bring it back -->
+      <button hidden class="tab" role="tab" id="tab-projects" aria-controls="projects" aria-selected="false" tabindex="-1">Personal Projects</button>
+      <button class="tab" role="tab" id="tab-skills" aria-controls="skills" aria-selected="false" tabindex="-1">Skills</button>
+      <button class="tab" role="tab" id="tab-beyond" aria-controls="beyond" aria-selected="false" tabindex="-1">Beyond Work</button>
+    </div>
+
+    <section id="experience" role="tabpanel" aria-labelledby="tab-experience">
+      <div class="item">
+        <div class="item-head">
+          <h3>Firmware Engineer (Specialist Team Leader Level) · FireAngel Safety Technology</h3>
+          <span class="meta">May 2025 — Present · Coventry, UK</span>
+        </div>
+        <ul>
+          <li>Contributed to firmware development of the Next Generation Smoke Alarms (Gen 6 smart devices), implementing modular and reliable safety-critical firmware to MISRA C standards, including the Techem multi-sensor alarm.</li>
+          <li>Converted product requirements into firmware requirements on concurrent fast-paced bare-metal projects.</li>
+          <li>Participated in peer reviews to catch defects early and upheld a quality-first design standard across the team.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>Firmware Engineer · FireAngel Safety Technology</h3>
+          <span class="meta">Mar 2024 — May 2025 · Coventry, UK</span>
+        </div>
+        <ul>
+          <li>Authored, reviewed and maintained technical documents for legacy products (Gen 5 range).</li>
+          <li>Investigated and debugged legacy product defects with a methodical, analytical, and problem-solving mindset.</li>
+          <li>Developed and maintained embedded firmware for low-power, safety-critical devices.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>Embedded Software Engineer · Embedded Design Laboratories</h3>
+          <span class="meta">Sep 2021 — Sep 2022 · Kano, Nigeria</span>
+        </div>
+        <ul>
+          <li>Diagnosed faults across photovoltaic arrays, charge controllers, inverters and battery systems to isolate underperforming units, and verified component ratings against system load calculations.</li>
+          <li>Programmed ATmega328 registers directly instead of relying on libraries, improving timing precision from milliseconds to microseconds, and implemented real-time systems on FreeRTOS with time slicing.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>Communications Electronics Engineer · Electronics Connections Limited</h3>
+          <span class="meta">Dec 2020 — Aug 2021 · Kano, Nigeria</span>
+        </div>
+        <ul>
+          <li>Installed and maintained new datalinks between the base station, four annex stations and customer hubs.</li>
+          <li>Performed component-level troubleshooting and repairs using oscilloscopes and multimeters, and reported fixes to clients and senior engineers.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>IT Intern · Nigerian National Petroleum Corporation</h3>
+          <span class="meta">Jul 2018 — Dec 2018 · Abuja, Nigeria</span>
+        </div>
+        <ul>
+          <li>Maintained critical network infrastructure for NNPC's oil and gas operations, keeping datacentres running continuously across secure, access-controlled server rooms.</li>
+          <li>Supported network infrastructure upgrades end to end, from fibre optic cabling and splicing to terminating switches and configuring routers and access points.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>Intern, Nigerian Quality Operations · Huawei Technologies</h3>
+          <span class="meta">Jan 2018 — Mar 2018 · Lagos, Nigeria</span>
+        </div>
+        <ul>
+          <li>Gained hands-on exposure to enterprise network infrastructure: switches, routers, firewalls, PoE devices and single-mode fibre optic connections.</li>
+          <li>Deployed and configured Windows systems using Business Desktop Deployment; resolved domain trust relationship failures across network printers and devices.</li>
+        </ul>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>Intern, Centre for Industrial Studies · Abubakar Tafawa Balewa University</h3>
+          <span class="meta">Jul 2016 — Aug 2016 · Bauchi, Nigeria</span>
+        </div>
+        <ul>
+          <li>Completed five engineering workshops and safety training (electrical, machining, welding, foundry and woodwork).</li>
+          <li>Designed PCBs using Live Wire and Altium, and took part in the full prototyping process: design transfer, component placement, washing, etching and drilling.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="education" role="tabpanel" aria-labelledby="tab-education" hidden>
+      <div class="item">
+        <div class="item-head">
+          <h3>MSc Electronic and Computer Engineering (Merit) · University of Birmingham</h3>
+          <span class="meta">Sep 2022 — Dec 2023 · Birmingham, UK</span>
+        </div>
+        <p>Thesis: Carefit — Smart Wearable Health Monitor</p>
+        <div class="modules">
+          <div class="module"><h4>Low-level Programming and Embedded Systems</h4></div>
+          <div class="module"><h4>Digital Systems Design</h4></div>
+          <div class="module"><h4>Sensing and Control for Autonomous Systems</h4></div>
+          <div class="module"><h4>Software and Systems</h4></div>
+          <div class="module"><h4>Computer and Communications Networks</h4></div>
+          <div class="module"><h4>Introductory Module for Computer Engineering</h4></div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="item-head">
+          <h3>BSc Electrical and Electronics Engineering (2:1) · Abubakar Tafawa Balewa University</h3>
+          <span class="meta">Apr 2014 — Feb 2020 · Bauchi, Nigeria</span>
+        </div>
+        <p>Thesis: Autonomous Solar Tracking System</p>
+        <div class="modules">
+          <div class="module"><h4>Digital Electronics</h4><span class="badge">★ Favourite course</span></div>
+          <div class="module"><h4>Digital Systems</h4></div>
+          <div class="module"><h4>Microcomputer and Microprocessor Systems</h4></div>
+          <div class="module"><h4>Computer Programming for Engineers</h4></div>
+          <div class="module"><h4>Introduction to Computer Architecture</h4></div>
+          <div class="module"><h4>Electronic Circuits Lab</h4></div>
+          <div class="module"><h4>Measurement and Instrumentation</h4></div>
+          <div class="module"><h4>Control Engineering</h4></div>
+          <div class="module"><h4>Physical Electronics</h4></div>
+        </div>
+        <details class="more">
+          <summary>All other modules from my BEng</summary>
+          <ul>
+            <li>Elementary Algebra</li>
+            <li>Calculus</li>
+            <li>Experimental Physics</li>
+            <li>Introductory Electricity and Magnetism</li>
+            <li>Introduction to Computer Science</li>
+            <li>Workshop Practice</li>
+            <li>Mathematical Methods</li>
+            <li>Science Technology and Society</li>
+            <li>Engineering Laboratories</li>
+            <li>Engineer in Society</li>
+            <li>Numerical Analysis</li>
+            <li>Circuit Theory 1</li>
+            <li>Analogue Electronic Circuits</li>
+            <li>Electromagnetic Fields and Waves</li>
+            <li>Telecommunication Principles</li>
+            <li>Electrical/Electronics Workshop</li>
+            <li>Complex Analysis</li>
+            <li>Electrical Machines</li>
+            <li>Analogue Circuit Design</li>
+            <li>Project and Seminar</li>
+            <li>Work Experience</li>
+            <li>Advanced Power Electronics</li>
+            <li>Electrical Service Design</li>
+            <li>System Reliability and Maintainability</li>
+            <li>Optimisation Theory</li>
+            <li>Data Communication Networks</li>
+            <li>Introduction to Artificial Intelligence</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <section id="certificates" role="tabpanel" aria-labelledby="tab-certificates" hidden>
+      <div class="certs">
+        <a class="cert" href="IELTS.jpg" target="_blank" rel="noopener">
+          <img src="IELTS.jpg" alt="IELTS Academic Test Report Form" loading="lazy">
+          <div class="cert-body">
+            <span class="meta">Jul 2021</span>
+            <h3>IELTS Academic</h3>
+            <p>British Council · Overall band 7.0 (CEFR C1)</p>
+          </div>
+        </a>
+        <a class="cert" href="NIEEE.png" target="_blank" rel="noopener">
+          <img src="NIEEE.png" alt="NIEEE Award of Merit for Most Eloquent" loading="lazy">
+          <div class="cert-body">
+            <span class="meta">Award</span>
+            <h3>Award of Merit: Most Eloquent</h3>
+            <p>Nigerian Institute of Electrical and Electronics Engineers, ATBU</p>
+          </div>
+        </a>
+        <a class="cert" href="HSE%20LEVEL%201%202%203.jpg" target="_blank" rel="noopener">
+          <img src="HSE%20LEVEL%201%202%203.jpg" alt="HSE Level 1, 2 and 3 certificate" loading="lazy">
+          <div class="cert-body">
+            <span class="meta">Nov 2019</span>
+            <h3>HSE Level 1, 2 &amp; 3</h3>
+            <p>National Industrial Safety Council of Nigeria</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section id="projects" role="tabpanel" aria-labelledby="tab-projects" hidden>
+      <!-- Trace is drawn from each project's data-start / data-end (YYYY-MM, end month inclusive) -->
+      <div class="analyzer" aria-hidden="true">
+        <div class="analyzer-head"><span>Logic trace</span><span>1 sample / month</span></div>
+        <div class="channel ruler"><span></span><div class="ticks" id="ticks"></div></div>
+        <div id="channels"></div>
+      </div>
+
+      <div class="cards">
+        <a class="card project" href="projects/carefit.html" data-label="CAREFIT" data-start="2023-05" data-end="2023-12">
+          <span class="meta" data-range></span>
+          <h3>Carefit</h3>
+          <p>Smart wearable health monitor — my MSc thesis project.</p>
+          <div class="tags"><span class="tag">Wearable</span><span class="tag">Embedded</span><span class="tag">MSc Thesis</span></div>
+          <span class="view">View project →</span>
+        </a>
+        <a class="card project" href="projects/thermotrack.html" data-label="THERMOTRACK" data-start="2022-11" data-end="2023-04">
+          <span class="meta" data-range></span>
+          <h3>ThermoTrack</h3>
+          <p>Per-room temperature loggers to split a shared house's heating bill by actual usage.</p>
+          <div class="tags"><span class="tag">Battery-powered</span><span class="tag">MCU</span><span class="tag">Low-power</span></div>
+          <span class="view">View project →</span>
+        </a>
+        <a class="card project" href="projects/solar-tracker.html" data-label="SOLAR TRK" data-start="2019-06" data-end="2020-02">
+          <span class="meta" data-range></span>
+          <h3>Solar Tracker</h3>
+          <p>Autonomous sun-following solar panel — my BSc thesis project.</p>
+          <div class="tags"><span class="tag">Control Systems</span><span class="tag">Solar</span><span class="tag">BSc Thesis</span></div>
+          <span class="view">View project →</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="skills" role="tabpanel" aria-labelledby="tab-skills" hidden>
+      <div class="skill-group">
+        <h3>Languages</h3>
+        <div class="tags"><span class="tag">C</span><span class="tag">C++</span><span class="tag">Python</span><span class="tag">VHDL</span><span class="tag">PSL</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Platforms &amp; Hardware</h3>
+        <div class="tags"><span class="tag">ARM Cortex-M</span><span class="tag">ATmega</span><span class="tag">Silicon Labs</span><span class="tag">Raspberry Pi</span><span class="tag">Adafruit</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Firmware Practices</h3>
+        <div class="tags"><span class="tag">Bare-metal</span><span class="tag">FreeRTOS</span><span class="tag">MISRA C</span><span class="tag">Safety-critical</span><span class="tag">Low-power</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Protocols</h3>
+        <div class="tags"><span class="tag">I²C</span><span class="tag">UART</span><span class="tag">SPI</span><span class="tag">TCP</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Development Tools &amp; IDEs</h3>
+        <div class="tags"><span class="tag">Simplicity Studio</span><span class="tag">MCUXpresso</span><span class="tag">Visual Studio</span><span class="tag">Xilinx Vivado</span><span class="tag">GitHub</span><span class="tag">Jira</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Software &amp; Toolchains</h3>
+        <div class="tags"><span class="tag">LDRA</span><span class="tag">MATLAB</span><span class="tag">Anaconda</span><span class="tag">Altium</span><span class="tag">TeraTerm</span><span class="tag">RealTerm</span></div>
+      </div>
+      <div class="skill-group">
+        <h3>Hardware &amp; Debug</h3>
+        <div class="tags"><span class="tag">Oscilloscopes</span><span class="tag">Multimeters</span><span class="tag">Saleae Logic Analyser</span><span class="tag">Debugger / JTAG</span><span class="tag">Soldering</span></div>
+      </div>
+    </section>
+
+    <section id="beyond" role="tabpanel" aria-labelledby="tab-beyond" hidden>
+      <div class="beyond-part">
+        <h2 class="beyond-head">Ben Nevis</h2>
+        <figure class="feature">
+          <img src="Ben%20Nevis.jpg" alt="Group photo at the summit of Ben Nevis in mist, holding a Hike for Out-of-School Children banner">
+          <figcaption>Taken at the summit of Ben Nevis, the UK's highest mountain.</figcaption>
+        </figure>
+        <p>I climbed Ben Nevis with the Street2School Collective team to support its work helping children in underserved communities in Northern Nigeria, where I'm from, to stay in school.</p>
+        <a class="button" href="https://lnkd.in/eG3ceddR" target="_blank" rel="noopener">Learn about Street2School</a>
+      </div>
+
+      <div class="beyond-part">
+        <h2 class="beyond-head">Teaching and Education</h2>
+        <p>I care about education and giving back. While at university, I tutored students one-on-one and helped others with their practical work. I run a YouTube channel where I teach maths, including complex numbers, and I have made a breakdown of the Arduino basics a beginner needs to get started.</p>
+        <a class="button" href="https://www.youtube.com/@muhammad_haruna" target="_blank" rel="noopener">Watch on YouTube</a>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> Muhammad Haruna</footer>
+  </main>
+
+  <script>
+    const tabs = [...document.querySelectorAll('.tab:not([hidden])')];
+
+    function select(tab, focus = true) {
+      tabs.forEach(t => {
+        const active = t === tab;
+        t.setAttribute('aria-selected', active);
+        t.tabIndex = active ? 0 : -1;
+        document.getElementById(t.getAttribute('aria-controls')).hidden = !active;
+      });
+      if (focus) tab.focus();
+    }
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight') select(tabs[(i + 1) % tabs.length]);
+        if (e.key === 'ArrowLeft') select(tabs[(i - 1 + tabs.length) % tabs.length]);
+      });
+    });
+
+    // Open the tab named in the URL, e.g. index.html#projects from a project page
+    const linked = tabs.find(t => '#' + t.getAttribute('aria-controls') === location.hash);
+    if (linked) select(linked, false);
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const colors = ['#3ddc97', '#f5b942', '#5ab0ff', '#ff6b8b', '#b38cff'];
+
+
+    // Logic analyser trace: one channel per project, high while it was active
+    const projects = [...document.querySelectorAll('.project')];
+    const toMonth = s => { const [y, m] = s.split('-').map(Number); return y * 12 + m - 1; };
+    const fmt = s => { const [y, m] = s.split('-').map(Number);
+      return new Date(y, m - 1).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }); };
+
+    const firstYear = Math.min(...projects.map(p => Math.floor(toMonth(p.dataset.start) / 12)));
+    const lastYear = Math.max(...projects.map(p => Math.floor(toMonth(p.dataset.end) / 12))) + 1;
+    const span = (lastYear - firstYear) * 12;
+    const xOf = month => ((month - firstYear * 12) / span * 1000).toFixed(1);
+
+    const ticks = document.getElementById('ticks');
+    for (let y = firstYear; y <= lastYear; y++) {
+      const t = document.createElement('span');
+      t.textContent = y;
+      t.style.left = ((y - firstYear) / (lastYear - firstYear) * 100) + '%';
+      ticks.appendChild(t);
+    }
+
+    const channels = document.getElementById('channels');
+    projects.forEach((p, i) => {
+      const x0 = xOf(toMonth(p.dataset.start));
+      const x1 = xOf(toMonth(p.dataset.end) + 1);
+      p.querySelector('[data-range]').textContent = `${fmt(p.dataset.start)} — ${fmt(p.dataset.end)}`;
+
+      const row = document.createElement('div');
+      row.className = 'channel';
+      row.style.setProperty('--ch', colors[i % colors.length]);
+      row.innerHTML = `
+        <span class="channel-label"><b>D${i}</b>${p.dataset.label}</span>
+        <div class="trace" style="--cols:${lastYear - firstYear}">
+          <svg viewBox="0 0 1000 40" preserveAspectRatio="none">
+            <path class="fill" d="M${x0},32 V8 H${x1} V32 Z"/>
+            <path d="M0,32 H${x0} V8 H${x1} V32 H1000"/>
+          </svg>
+        </div>`;
+      channels.appendChild(row);
+
+      row.addEventListener('click', () => { location.href = p.href; });
+      const highlight = on => { row.classList.toggle('active', on); p.classList.toggle('active', on); };
+      [row, p].forEach(el => {
+        el.addEventListener('mouseenter', () => highlight(true));
+        el.addEventListener('mouseleave', () => highlight(false));
+      });
+    });
+  </script>
+</body>
+</html>
